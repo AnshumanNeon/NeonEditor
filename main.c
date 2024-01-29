@@ -1,6 +1,6 @@
 #include <ncurses.h> 
 #include "./src/insert_mode.h"
-#include "./src/command_mode.h"
+#include "./src/buffer.h"
 
 #define ctrl(x) ((x) & 0x1f)
 
@@ -57,6 +57,11 @@ int main()
     {
       curr_mode = INSERT;
       continue;
+    }
+    
+    if(curr_mode != NORMAL && ch == ctrl('n'))
+    {
+      curr_mode = NORMAL;
     }
     
     if(curr_mode == INSERT)
