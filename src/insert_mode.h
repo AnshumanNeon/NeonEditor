@@ -1,15 +1,14 @@
 #include <ncurses.h>
 
-void insert_mode(char ch)
+void insert_mode(char ch, int x, int y)
 {
-  addch(ch);
-  if(ch == 27)
+  if(ch == 8 || ch == 127 || ch == 7)
   {
-    nodelay(TRUE);
-    ch = getch();
-    if(ch == -1)
-    {
-      continue;
-    }
+    move(y, x - 1);
+    delch();
+  }
+  else
+  {
+    addch(ch);
   }
 }
