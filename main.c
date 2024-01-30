@@ -1,58 +1,19 @@
-#include <ncurses.h> 
-#include "./src/text_edit.h"
-#include "./src/command_palette.h"
-#include "./src/buffer.h"
-
-#define ctrl(x) ((x) & 0x1f)
-
-int command_palette_enabled = 0;
+#include "./src/editor.h"
 
 int main()
 {
-  initscr();
-  raw();
-  keypad(stdscr, TRUE);
-  noecho();
-  char str[5]; 
-  int ch;
-  int max_y, max_x;
+  Editor editor;
+  setup_ncurses();
+  init_buffer(&editor);
 
-  getmaxyx(stdscr, max_y, max_x);
-
-  int x, y;
-  move(0, 0);
-
-  while(1)
+  while(should_quit(&editor))
   {
-    getyx(stdscr, y, x);
-    move(y, x);
-    ch = getch();
-    
-    if(ch == ctrl('c')) break;
-    
-    if(ch == ctrl('e'))
-    {
-      command_palette_enabled = 1;
-    }
+    get_input(&editor);
 
-    if(command_palette_enabled && ch == 10)
-    {
-      command_palette_enabled = 0;
-    }
-
-    if(!command_palette_enabled)
-    {
-      text_edit(ch, x, y);
-    }
-    else
-    {
-      command_palette();
-    }
-    
-    refresh();
+    update(&editor);
   }
   
-  endwin();
+  end_editor();
   
-return 0;
+  return 0;
 }

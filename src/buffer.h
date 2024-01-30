@@ -6,4 +6,7 @@ typedef struct
   vector lines;
 } buffer;
 
-void remove_tab(buffer* buffer);
+void append_line(buffer* buff, char* line)
+{
+  append_vector(&buff->lines, line);
+}
