@@ -6,6 +6,7 @@ typedef struct
   vector lines;
 } buffer;
 
+
 void append_line(buffer* buff, char* line)
 {
   append_vector(&buff->lines, line);
