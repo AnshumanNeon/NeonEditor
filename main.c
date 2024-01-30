@@ -1,33 +1,11 @@
 #include <ncurses.h> 
-#include "./src/insert_mode.h"
+#include "./src/text_edit.h"
+#include "./src/command_palette.h"
 #include "./src/buffer.h"
 
 #define ctrl(x) ((x) & 0x1f)
 
-enum MODE
-{
-  NORMAL = 0,
-  INSERT = 1,
-  COMMAND = 2,
-};
-
-enum MODE curr_mode = NORMAL;
-
-char* get_mode_str()
-{
-  if(curr_mode == 2)
-  {
-    return "COMMAND";
-  }
-  if(curr_mode == 1)
-  {
-    return "INSERT";
-  }
-  else
-  {
-    return "NORMAL";
-  }
-}
+int command_palette_enabled = 0;
 
 int main()
 {
@@ -47,27 +25,29 @@ int main()
   while(1)
   {
     getyx(stdscr, y, x);
-    mvprintw(max_y - 1, 0, get_mode_str());
     move(y, x);
     ch = getch();
     
     if(ch == ctrl('c')) break;
     
-    if(ch == 'i' && curr_mode == NORMAL)
+    if(ch == ctrl('e'))
     {
-      curr_mode = INSERT;
-      continue;
+      command_palette_enabled = 1;
     }
-    
-    if(curr_mode != NORMAL && ch == ctrl('n'))
+
+    if(command_palette_enabled && ch == 10)
     {
-      curr_mode = NORMAL;
+      command_palette_enabled = 0;
     }
-    
-    if(curr_mode == INSERT)
+
+    if(!command_palette_enabled)
     {
-      insert_mode(ch, x, y);
-    }  
+      text_edit(ch, x, y);
+    }
+    else
+    {
+      command_palette();
+    }
     
     refresh();
   }
