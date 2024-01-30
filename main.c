@@ -6,9 +6,11 @@ int main()
   setup_ncurses();
   init_buffer(&editor);
 
-  while(should_quit(&editor))
+  while(1)
   {
     get_input(&editor);
+
+    if(editor.ch == ctrl('c')) break;
 
     update(&editor);
   }
