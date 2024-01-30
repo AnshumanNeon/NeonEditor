@@ -10,7 +10,7 @@ int main()
   {
     get_input(&editor);
 
-    if(editor.ch == ctrl('c')) break;
+    if(should_quit(&editor)) break;
 
     update(&editor);
   }

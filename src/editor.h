@@ -30,7 +30,7 @@ void get_input(Editor* editor)
 
 void update(Editor* editor)
 {
-  if(editor->ch == ctrl('e'))
+  if(editor->ch == 27)
   {
     editor->command_palette_enabled = 1;
     move(editor->height - 1, editor->x);
@@ -65,6 +65,7 @@ void setup_ncurses()
   raw();
   keypad(stdscr, TRUE);
   noecho();
+  set_escdelay(0.0f);
 }
 
 int load_file(Editor* editor, char* file)
