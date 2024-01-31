@@ -98,11 +98,16 @@ int load_file(Editor* editor, char* file)
   return 1;
 }
 
-void init_buffer(Editor* editor)
+void init_buffer(Editor* editor, char* file)
 {
   getmaxyx(stdscr, editor->height, editor->width);
   editor->x = 0;
   editor->y = 0;
   move(editor->y, editor->x);
-  // load_file(editor, file);
+  load_file(editor, file);
+
+  for(int i = 0; i < editor->m_buffer.lines.total; i++)
+  {
+    printw("%s\n", editor->m_buffer.lines.items[i]);
+  }
 }
