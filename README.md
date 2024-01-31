@@ -23,12 +23,8 @@ But if you're using need to open command palette again and again, then that make
 
 ### The Approach / Solution
 
-The command palette, by default, will **not** be active, whatever you type will be seen as text and will be typed on the screen. To type commands you need to have Caps-lock on, if your caps-lock key is on then everything you type will be interpreted as command. After you press enter, the command palette will be disabled and you need to open it again to type the next commands.
+The command palette, by default, will **not** be active, whatever you type will be seen as text and will be typed on the screen. To type commands you need to enable command palette by pressing Ctrl+e. After you press enter, the command palette will be disabled and you need to open it again to type the next commands.
 In order to increase efficiency, you can divide commands by semicolons (";"). This way you don't need to enable the command palette again and again.
-But what if you need to use the caps-lock key to type long strings of capitalized content?
-There are two solutions to this:
-* **type-first-capitalize-later**: N-ed includes commands that can select a piece of text and then you can capitalize them all at once.
-* **New key**: If you want to use a toggle key for this, N-ed provides the key-combination of Ctrl+e to do so. You can also map a key of your liking for this action.
 
 ## Note
 
