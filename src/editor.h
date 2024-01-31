@@ -24,7 +24,8 @@ int should_quit(Editor* editor)
 
 void get_input(Editor* editor)
 {
-  getyx(stdscr, editor->y, editor->y);
+  editor->x = getcurx(stdscr);
+  editor->y = getcury(stdscr);
   editor->ch = getch();
 }
 
