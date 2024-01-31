@@ -23,7 +23,7 @@ But if you're using need to open command palette again and again, then that make
 
 ### The Approach / Solution
 
-The command palette, by default, will **not** be active, whatever you type will be seen as text and will be typed on the screen. To type commands you need to enable command palette by pressing Ctrl+e. After you press enter, the command palette will be disabled and you need to open it again to type the next commands.
+The command palette, by default, will **not** be active, whatever you type will be seen as text and will be typed on the screen. To type commands you need to enable command palette by pressing Space+Tab. After you press enter, the command palette will be disabled and you need to open it again to type the next commands.
 In order to increase efficiency, you can divide commands by semicolons (";"). This way you don't need to enable the command palette again and again.
 
 ## Note

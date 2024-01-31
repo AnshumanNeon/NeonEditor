@@ -12,6 +12,8 @@ typedef struct
   int width, height;
   int x, y;
   int command_palette_enabled;
+  // Check command palette
+  int space_pressed;
   // Buffer
   buffer m_buffer;
   int ch;
@@ -31,10 +33,21 @@ void get_input(Editor* editor)
 
 void update(Editor* editor)
 {
-  if(editor->ch == ctrl('e'))
+  if(editor->ch == 32)
+  {
+    editor->space_pressed = 1;
+  }
+
+  if(editor->space_pressed == 1 && editor->ch == ERR)
+  {
+    editor->space_pressed = 0;
+  }
+
+  if(editor->ch == 9 && editor->space_pressed == 1)
   {
     editor->command_palette_enabled = 1;
     move(editor->height - 1, 0);
+    return;
   }
   
   if(editor->command_palette_enabled && editor->ch == 10)
