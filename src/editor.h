@@ -1,6 +1,6 @@
 #include <ncurses.h>
 #include <stdlib.h>
-#include "cvector.h"
+#include "./buffer.h"
 #include "./text_edit.h"
 #include "./command_palette.h"
 
@@ -15,7 +15,7 @@ typedef struct
   // Check command palette
   int space_pressed;
   // Buffer
-  cvector_vector_type(char*) m_buffer;
+  Buffer m_buffer;
   int ch;
 } Editor;
 
@@ -68,8 +68,9 @@ void update(Editor* editor)
   refresh();
 }
 
-void end_editor()
+void end_editor(Editor* editor)
 {
+  end_buffer(&editor->m_buffer);
   endwin();
 }
 
@@ -88,30 +89,21 @@ int load_file(Editor* editor, const char* file)
 
   FILE* file_ptr = fopen(file, "r");
 
-  int len = 500;
-  char line[len];
-
-  while(fgets(line, sizeof(line), file_ptr))
-  {
-    cvector_push_back(editor->m_buffer, line);
-  }
+  init_buffer(&editor->m_buffer, file_ptr);
+  set_buffer(&editor->m_buffer, file_ptr);
 
   fclose(file_ptr);
 
   return 1;
 }
 
-void init_buffer(Editor* editor, const char* file)
+void init_editor(Editor* editor, const char* file)
 {
   getmaxyx(stdscr, editor->height, editor->width);
   editor->x = 0;
   editor->y = 0;
   move(editor->y, editor->x);
-  editor->m_buffer = NULL;
   load_file(editor, file);
 
-  for(size_t i = 0; i < cvector_size(editor->m_buffer); i++)
-  {
-    printw("%s\n", editor->m_buffer[i]);
-  }
+  printw("%s", editor->m_buffer.content);
 }

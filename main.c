@@ -4,7 +4,7 @@ int main()
 {
   Editor editor;
   setup_ncurses();
-  init_buffer(&editor, "./test.txt");
+  init_editor(&editor, "./test.txt");
 
   while(1)
   {
@@ -15,7 +15,7 @@ int main()
     update(&editor);
   }
   
-  end_editor();
+  end_editor(&editor);
   
   return 0;
 }
