@@ -16,6 +16,8 @@ typedef struct
   int space_pressed;
   // Buffer
   Buffer m_buffer;
+  int save_at_end;
+
   int ch;
 } Editor;
 
@@ -36,6 +38,11 @@ void update(Editor* editor)
   if(editor->ch == 32)
   {
     editor->space_pressed = 1;
+  }
+
+  if(editor->ch == ctrl('s'))
+  {
+    editor->save_at_end = 1;
   }
 
   if(editor->space_pressed == 1 && editor->ch == ERR)
@@ -68,8 +75,23 @@ void update(Editor* editor)
   refresh();
 }
 
+int save_file(Editor* editor, const char* file)
+{
+  if(file == NULL) return 0;
+
+  FILE* file_ptr = fopen(file, "w");
+
+  if(!fwrite(editor->m_buffer.content, 1, editor->m_buffer.length, file_ptr)) return 0;
+
+  fclose(file_ptr);
+  
+  return 1;
+}
+
 void end_editor(Editor* editor)
 {
+  if(editor->save_at_end) save_file(editor, "./text_edit.h");
+
   end_buffer(&editor->m_buffer);
   endwin();
 }
@@ -102,6 +124,7 @@ void init_editor(Editor* editor, const char* file)
   getmaxyx(stdscr, editor->height, editor->width);
   editor->x = 0;
   editor->y = 0;
+  editor->save_at_end = 0;
   move(editor->y, editor->x);
   load_file(editor, file);
 
