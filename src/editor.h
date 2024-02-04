@@ -1,25 +1,8 @@
 #include <ncurses.h>
 #include <stdlib.h>
-#include "./buffer.h"
+#include "./defs.h"
 #include "./text_edit.h"
 #include "./command_palette.h"
-
-#define ctrl(x) ((x) & 0x1f)
-
-typedef struct
-{
-  //Metadata
-  int width, height;
-  int x, y;
-  int command_palette_enabled;
-  // Check command palette
-  int space_pressed;
-  // Buffer
-  Buffer m_buffer;
-  int save_at_end;
-
-  int ch;
-} Editor;
 
 int should_quit(Editor* editor)
 {
@@ -65,13 +48,13 @@ void update(Editor* editor)
   
   if(!editor->command_palette_enabled)
   {
-    text_edit(editor->ch, editor->x, editor->y);
+    text_edit(editor);
   }
   else
   {
     command_palette();
   }
-  
+
   refresh();
 }
 

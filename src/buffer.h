@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct Buffer
 {
@@ -30,4 +31,18 @@ void set_buffer(Buffer* buff, FILE* file)
     end_buffer(buff);
     return;
   }
+}
+
+void add_chars_to_buffer(Buffer* buff, char* msg)
+{
+  if(msg == NULL) return;
+
+  if(!buff->content)
+  {
+    buff->content = msg;
+    return;
+  }
+  
+  buff->content = strcat(buff->content, msg);
+  return;
 }

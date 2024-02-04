@@ -1,22 +1,25 @@
 #include <ncurses.h>
+#include "./defs.h"
 
-void text_edit(char ch, int x, int y)
+void text_edit(Editor* editor)
 {
-  if(ch == 8 || ch == 127 || ch == 7)
+  if(editor->ch == 8 || editor->ch == 127 || editor->ch == 7)
   {
-    if(x > 0)
+    if(editor->x > 0)
     {
-      move(y, x - 1);
+      move(editor->y, editor->x - 1);
     }
     else
     {
-      move(y - 1, x);
+      move(editor->y - 1, editor->x);
     }
 
     delch();
   }
   else
   {
-    addch(ch);
+    char ch = editor->ch;
+    editor->m_buffer.content = strcat(editor->m_buffer.content, &ch);
+    addch(editor->ch);
   }
 }
