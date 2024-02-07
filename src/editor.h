@@ -16,16 +16,26 @@ void get_input(Editor* editor)
   editor->ch = getch();
 }
 
+int save_file(Editor* editor)
+{
+  if(editor->file == NULL) return -1;
+
+  FILE* file_ptr = fopen(editor->file, "w");
+
+  if(!file_ptr) return -1;
+
+  fputs("yo! boys!", file_ptr);
+
+  fclose(file_ptr);
+  
+  return 1;
+}
+
 void update(Editor* editor)
 {
   if(editor->ch == 32)
   {
     editor->space_pressed = 1;
-  }
-
-  if(editor->ch == ctrl('s'))
-  {
-    editor->save_at_end = 1;
   }
 
   if(editor->space_pressed == 1 && editor->ch == ERR)
@@ -48,7 +58,14 @@ void update(Editor* editor)
   
   if(!editor->command_palette_enabled)
   {
-    text_edit(editor);
+    if(editor->ch == ctrl('s'))
+    {
+      save_file(editor);
+    }
+    else
+    {
+      text_edit(editor);
+    }
   }
   else
   {
@@ -58,23 +75,8 @@ void update(Editor* editor)
   refresh();
 }
 
-int save_file(Editor* editor, const char* file)
-{
-  if(file == NULL) return 0;
-
-  FILE* file_ptr = fopen(file, "w");
-
-  if(!fwrite(editor->m_buffer.content, 1, editor->m_buffer.length, file_ptr)) return 0;
-
-  fclose(file_ptr);
-  
-  return 1;
-}
-
 void end_editor(Editor* editor)
 {
-  if(editor->save_at_end) save_file(editor, "./text_edit.h");
-
   end_buffer(&editor->m_buffer);
   endwin();
 }
@@ -102,14 +104,15 @@ int load_file(Editor* editor, const char* file)
   return 1;
 }
 
-void init_editor(Editor* editor, const char* file)
+void init_editor(Editor* editor, char* file)
 {
   getmaxyx(stdscr, editor->height, editor->width);
   editor->x = 0;
   editor->y = 0;
   editor->save_at_end = 0;
   move(editor->y, editor->x);
-  load_file(editor, file);
+  editor->file = file;
+  load_file(editor, editor->file);
 
   printw("%s", editor->m_buffer.content);
 }

@@ -14,6 +14,7 @@ typedef struct
   // Buffer
   Buffer m_buffer;
   int save_at_end;
+  char* file;
 
   int ch;
 } Editor;
