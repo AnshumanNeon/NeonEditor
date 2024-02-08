@@ -24,8 +24,7 @@ int save_file(Editor* editor)
 
   if(!file_ptr) return -1;
 
-  fputs("yo! boys!", file_ptr);
-
+  fprintf(file_ptr, "%s", editor->m_buffer.content);
   fclose(file_ptr);
   
   return 1;
