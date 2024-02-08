@@ -16,15 +16,21 @@ void get_input(Editor* editor)
   editor->ch = getch();
 }
 
+int get_backspace(Editor* editor)
+{
+  return (editor->ch == ctrl('G') || editor->ch == ctrl('h'));
+}
+
 int save_file(Editor* editor)
 {
   if(editor->file == NULL) return -1;
 
-  FILE* file_ptr = fopen(editor->file, "w");
+  FILE* file_ptr = fopen(editor->file, "w+");
 
   if(!file_ptr) return -1;
 
   fprintf(file_ptr, "%s", editor->m_buffer.content);
+
   fclose(file_ptr);
   
   return 1;
@@ -48,29 +54,34 @@ void update(Editor* editor)
     move(editor->height - 1, 0);
     return;
   }
+
+  if(editor->ch == 's' && editor->space_pressed == 1)
+  {
+    save_file(editor);
+  }
   
   if(editor->command_palette_enabled && editor->ch == 10)
   {
     editor->command_palette_enabled = 0;
     return;
   }
-  
+
   if(!editor->command_palette_enabled)
   {
-    if(editor->ch == ctrl('s'))
+    if(get_backspace(editor))
     {
-      save_file(editor);
+      delch();
+      return;
     }
-    else
-    {
-      text_edit(editor);
-    }
+
+    text_edit(editor);
+    return;
   }
   else
   {
     command_palette();
   }
-
+  
   refresh();
 }
 
