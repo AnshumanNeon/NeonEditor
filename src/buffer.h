@@ -1,32 +1,45 @@
 #include <stdlib.h>
 #include <string.h>
+#include "../utils/count_lines.h"
+
+typedef struct Row
+{
+  int size;
+  char* content;
+} Row;
 
 typedef struct Buffer
 {
-  char* content;
+  Row rows[1024];
   int length;
+  int curr_pos;
 } Buffer;
 
 void init_buffer(Buffer* buff, FILE* file)
 {
-  fseek(file, 0, SEEK_END);
-  buff->length = ftell(file);
-  fseek(file, 0, SEEK_SET);
+  buff->length = count_lines(file);
 
-  buff->content = malloc(buff->length);
+  for(int i = 0; i < buff->length; i++)
+  {
+    buff->rows[i].content = calloc(1024, sizeof(char));
+  }
 }
 
 void end_buffer(Buffer* buff)
 {
-  free(buff->content);
+  for(int i = 0; i < buff->length; i++)
+  {
+    free(buff->rows[i].content);
+  }
+
   buff->length = -1;
 }
-
+/*
 void set_buffer(Buffer* buff, FILE* file)
 {
   if(!buff->content) return;
 
-  if(!fread(buff->content, 1, buff->length, file))
+  if(fgets(buff->rows[i].content, buff->rows[i], file))
   {
     end_buffer(buff);
     return;
@@ -46,3 +59,4 @@ void add_chars_to_buffer(Buffer* buff, char* msg)
   buff->content = strcat(buff->content, msg);
   return;
 }
+*/

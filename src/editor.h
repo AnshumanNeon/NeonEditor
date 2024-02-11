@@ -29,7 +29,7 @@ int save_file(Editor* editor)
 
   if(!file_ptr) return -1;
 
-  fprintf(file_ptr, "%s", editor->m_buffer.content);
+  //fprintf(file_ptr, "%s", editor->m_buffer.content);
 
   fclose(file_ptr);
   
@@ -38,6 +38,11 @@ int save_file(Editor* editor)
 
 void update(Editor* editor)
 {
+  for(int i = 0; i < editor->m_buffer.length; i++)
+  {
+    mvprintw(i, 0, editor->m_buffer.rows[i].content);
+  }
+
   if(editor->ch == 32)
   {
     editor->space_pressed = 1;
@@ -107,7 +112,6 @@ int load_file(Editor* editor, const char* file)
   FILE* file_ptr = fopen(file, "r");
 
   init_buffer(&editor->m_buffer, file_ptr);
-  set_buffer(&editor->m_buffer, file_ptr);
 
   fclose(file_ptr);
 
@@ -123,6 +127,4 @@ void init_editor(Editor* editor, char* file)
   move(editor->y, editor->x);
   editor->file = file;
   load_file(editor, editor->file);
-
-  printw("%s", editor->m_buffer.content);
 }
