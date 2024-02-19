@@ -29,7 +29,7 @@ int save_file(Editor* editor)
 
   if(!file_ptr) return -1;
 
-  //fprintf(file_ptr, "%s", editor->m_buffer.content);
+  fprintf(file_ptr, "%s", editor->m_buffer.content);
 
   fclose(file_ptr);
   
